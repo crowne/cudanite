@@ -1,0 +1,44 @@
+E:\crypto\monero\ccminer>ccminer -o stratum+tcp://monerohash.com:5555 -u 42KRr7ywKXq7n1gbNQbvoadQstiQw8qM2WN4wBANaFUfNA4
+EQXrR4VFiVtnmJJud3TDDyRfHju9NmJzjf6NiNX4BUB7r4Dv -p x --debug --protocol-dump
+    *** ccminer-cryptonight for nVidia GPUs by tsiv ***
+ based on ccMiner by Christian Buchner and Christian H.
+ based on cpuminer-multi by LucasJones
+ based on pooler-cpuminer 2.3.2 (c) 2010 Jeff Garzik, 2012 pooler
+    BTC donation address: 1JHDKp59t1RhHFXsTw2UQpR3F9BBz3R3cs
+    DRK donation address: XrHp267JNTVdw5P3dsBpqYfgTpWnzoESPQ
+    JPC donation address: Jb9hFeBgakCXvM5u27rTZoYR9j13JGmuc2
+    VTC donation address: VwYsZFPb6KMeWuP4voiS9H1kqxcU9kGbsw
+    XMR donation address:
+      (man these are long... single address, split on two lines)
+      42uasNqYPnSaG3TwRtTeVbQ4aRY3n9jY6VXX3mfgerWt4ohD
+      QLVaBPv3cYGKDXasTUVuLvhxetcuS16ynt85czQ48mbSrWX
+-----------------------------------------------------------------
+[2017-10-17 21:52:05] Using JSON-RPC 2.0
+[2017-10-17 21:52:05] 1 miner threads started, using 'cryptonight' algorithm.
+[2017-10-17 21:52:05] Starting Stratum on stratum+tcp://monerohash.com:5555
+[2017-10-17 21:52:05] GPU #0: Quadro K3100M (4 SMX), using 40 blocks of 8 threads
+* About to connect() to monerohash.com port 5555 (#0)
+*   Trying 198.251.81.82...
+* TCP_NODELAY set
+* Connected to monerohash.com (198.251.81.82) port 5555 (#0)
+* Connection #0 to host monerohash.com left intact
+[2017-10-17 21:52:06] > {"method": "login", "params": {"login": "42KRr7ywKXq7n1gbNQbvoadQstiQw8qM2WN4wBANaFUfNA4EQXrR4VF
+iVtnmJJud3TDDyRfHju9NmJzjf6NiNX4BUB7r4Dv", "pass": "x", "agent": "cpuminer-multi/0.1"}, "id": 1}
+[2017-10-17 21:52:06] < {"id":1,"jsonrpc":"2.0","error":null,"result":{"id":"883411448867991","job":{"blob":"0606e1be99c
+f0566532bb6d9e10e90a63a5c2b3c4e47be2d04d450e0bedf5a877d0f64ce1c4239000000005ec6fd115353a71b0891c457296f146655b019fc33617
+aef30505e2fc982764108","job_id":"944252000143751","target":"7b5e0400"},"status":"OK"}}
+[2017-10-17 21:52:06] Auth id: 883411448867991
+[2017-10-17 21:52:06] Pool set diff to 15000
+[2017-10-17 21:52:06] Stratum detected new block
+[2017-10-17 21:52:10] GPU #0: Quadro K3100M, 70.99 H/s
+[2017-10-17 21:52:45] DEBUG: hash <= target
+Hash:   00013b755f6c6754046d171cabc762baa95495404e879ee0ea3ea121a70ed786
+Target: 00045e7bffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+[2017-10-17 21:52:45] GPU #0: Quadro K3100M, 67.47 H/s
+[2017-10-17 21:52:45] > {"method": "submit", "params": {"id": "883411448867991", "job_id": "944252000143751", "nonce": "40090000",
+ "result": "86d70ea721a13eeae09e874e409554a9ba62c7ab1c176d0454676c5f753b0100"}, "id":1}
+
+[2017-10-17 21:52:45] < {"id":1,"jsonrpc":"2.0","error":null,"result":{"status":"OK"}}
+[2017-10-17 21:52:45] accepted: 1/1 (100.00%), 67.47 H/s (yay!!!)
+^CTerminate batch job (Y/N)? y
+PS E:\crypto\monero\ccminer>

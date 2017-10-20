@@ -1,0 +1,24 @@
+[2017-10-14 11:32:02] > {"method": "login", "params": {"login": "42KRr7ywKXq7n1gbNQbvoadQstiQw8qM2WN4wBANaFUfNA4EQXrR4VFiVtnmJJud3TDDyRfHju9NmJzjf6NiNX4BUB7r4Dv", "pass": "x", "agent": "cpuminer-multi/0.1"}, "id": 1}
+[2017-10-14 11:32:02] < {"id":1,"jsonrpc":"2.0","error":null,"result":{"id":"686739698913879","job":{"blob":"0606d2b187cf0501d20173518e6798426879b42639a21d0060c177492d3476c4263560c354eac000000000087c8e60725794bfac010cc42ccdf9df6c388f4d37
+f8ef67b53e3a90a7474a6103","job_id":"456774535030126","target":"7b5e0400"},"status":"OK"}}
+
+[2017-10-14 11:37:29] < {"jsonrpc":"2.0","method":"job","params":{"blob":"0606d6b587cf0535c78512754ddc1f3136f6da7f0562f22ff5d64e4c3587d0758a07aa2083fe4c00000000e141ab83923e5ee7b9ce0af50551179982853640cb2a0b1a4a8673130cee06f106","job_id":
+"697850426007062","target":"6f4d0900"}}
+[2017-10-14 11:37:29] Stratum detected new block
+[2017-10-14 11:37:32] GPU #0: Quadro K3100M, 73.38 H/s
+[2017-10-14 11:37:41] DEBUG: hash <= target
+Hash:   0001f907ef2edcae7a2cb3953463c73afb420615d6a0430f393eac57814f8510
+Target: 00094d6fffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+[2017-10-14 11:37:41] GPU #0: Quadro K3100M, 37.30 H/s
+[2017-10-14 11:37:41] > {"method": "submit", "params": {"id": "686739698913879", "job_id": "697850426007062", "nonce": "47010000", "result": "10854f8157ac3e390f43a0d6150642fb3ac7633495b32c7aaedc2eef07f90100"}, "id":1}
+
+[2017-10-14 11:37:41] < {"id":1,"jsonrpc":"2.0","error":null,"result":{"status":"OK"}}
+[2017-10-14 11:37:41] accepted: 1/1 (100.00%), 37.30 H/s (yay!!!)
+[2017-10-14 11:37:54] < {"jsonrpc":"2.0","method":"job","params":{"blob":"0606efb587cf05369c8b0f823cb67c3cdbfec22a696919d17fbff705dfb6a3b063cf19f1b205720000000094c1b6d32fa7630f8a2a1f6fab9fcd13e41b516686c2a853e6c8eab135943eab01","job_id":
+"679274419299326","target":"6f4d0900"}}
+[2017-10-14 11:37:54] Stratum detected new block
+[2017-10-14 11:37:55] < {"jsonrpc":"2.0","method":"job","params":{"blob":"0606efb587cf05369c8b0f823cb67c3cdbfec22a696919d17fbff705dfb6a3b063cf19f1b2057200000000ba812c2b9d5e7432c371eac4cca4fa568e5fb380f0966b25d1ecbe3cb3e64f5801","job_id":
+"942959260893985","target":"ca500500"}}
+[2017-10-14 11:37:55] Pool set diff to 12329
+[2017-10-14 11:37:55] Stratum detected new block
+[2017-10-14 11:37:58] GPU #0: Quadro K3100M, 73.58 H/s
