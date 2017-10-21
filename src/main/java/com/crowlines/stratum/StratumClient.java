@@ -1,5 +1,6 @@
 package com.crowlines.stratum;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -12,7 +13,7 @@ import com.crowlines.stratum.server.StratumServer;
 import com.googlecode.jsonrpc4j.JsonRpcClient;
 import com.googlecode.jsonrpc4j.ProxyUtil;
 
-public class StratumClient {
+public class StratumClient implements Closeable {
 	
 	private static final Logger LOGGER = Logger.getLogger( StratumClient.class.getName() );
 	
@@ -41,6 +42,20 @@ public class StratumClient {
         }
 	}
 	
+    @Override
+    public void close() throws IOException {
+        try {
+            job = null;	    
+            minerId = null;
+            if ( socket != null ) {
+                socket.close();
+            }
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
+        }
+	}
+	
 	public LoginResult login(final String login, final String pass) {
         LoginRequest arguments = new LoginRequest();
         arguments.login = login;
@@ -48,7 +63,7 @@ public class StratumClient {
         arguments.agent = "cudanite/1.0";
         
         LoginResult result = service.login(arguments);
-        if ( result.status.equals("OK") ) {
+        if ( result != null && "OK".equals(result.status) ) {
             this.minerId = result.id;
             this.job = result.job;
         }
@@ -68,4 +83,22 @@ public class StratumClient {
 	    return this.minerId;
 	}
 	
+	public Job getJob() {
+	    Job newJob = null;
+	    
+	    if ( !this.isLoggedIn() ) {
+	        throw new IllegalStateException("Not logged in");
+	    }
+	    
+	    newJob = service.getjob(this.minerId);
+	    if ( this.job == null ) {
+	        this.job = newJob;
+	    } else if ( ! this.job.jobId.equals(newJob.jobId) ) {
+            LOGGER.log(Level.INFO, "New Job detected : " + newJob.jobId );
+            this.job = newJob;
+	    }
+	    
+	    return job;
+	}
+
 }
