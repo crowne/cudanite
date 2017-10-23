@@ -47,6 +47,7 @@ public class StratumServerImpl implements StratumServer {
         }
     }
     
+/*
     private String generateUid() {
         BigInteger min = new BigInteger("100000000000000");
         BigInteger max = new BigInteger("999999999999999");
@@ -54,15 +55,16 @@ public class StratumServerImpl implements StratumServer {
 //        BigInteger id = max.subtract(min).add(BigInteger.ONE).multiply(BigInteger.valueOf( Math.random() ));
         
         return "";
-        /*
-        uid = function(){
-            var min = 100000000000000;
-            var max = 999999999999999;
-            var id = Math.floor(Math.random() * (max - min + 1)) + min;
-            return id.toString();
-        };
-        */
+        
+// JavaScript version
+//        uid = function(){
+//            var min = 100000000000000;
+//            var max = 999999999999999;
+//            var id = Math.floor(Math.random() * (max - min + 1)) + min;
+//            return id.toString();
+//        };
     }
+*/
     
     @Override
     public LoginResult login(final LoginRequest arguments) {
