@@ -31,4 +31,23 @@ public class Job {
         this.blob = blob;
     }
     
+    @Override
+    public String toString() {
+        return "job_id:" + this.jobId;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        boolean result = false;
+        
+        if (this == obj) {
+            result = true;
+        } else if (obj instanceof Job) {
+            Job otherJob = (Job) obj;
+            String otherJobId = otherJob.jobId;
+            result = jobId.equals(otherJobId);
+        }
+        
+        return result;
+    }
 }
