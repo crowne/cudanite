@@ -33,4 +33,30 @@ public class TestJob {
         Assert.assertNotEquals("Cannot be equal to null", job1, null);
     }
 
+    @Test
+    public void testIsValid() throws JsonProcessingException {
+        Job job = null;
+        String jobId = "697850426007062";
+        String target = "6f4d0900";
+        String blob = "0606d6b587cf0535c78512754ddc1f3136f6da7f0562f22ff5d64e4c3587d0758a07aa2083fe4c00000000e141ab83923e5ee7b9ce0af50551179982853640cb2a0b1a4a8673130cee06f106";
+
+        job = StratumTestFactory.createJob(jobId, target, blob);
+        Assert.assertTrue("Job should be valid", job.isValid() );
+        
+        job = StratumTestFactory.createJob(null, target, blob);
+        Assert.assertFalse("Invalid : null jobId", job.isValid() );
+        
+        job = StratumTestFactory.createJob(jobId, null, blob);
+        Assert.assertFalse("Invalid : null target", job.isValid() );
+
+        job = StratumTestFactory.createJob(jobId, target, null);
+        Assert.assertFalse("Invalid : null blob", job.isValid() );
+
+        job = StratumTestFactory.createJob(jobId, target, "12345678901234567890123456789012345678901234567890A");
+        Assert.assertFalse("Invalid : Odd length blob", job.isValid() );
+
+        job = StratumTestFactory.createJob(jobId, target, "123");
+        Assert.assertFalse("Invalid : Short length blob", job.isValid() );
+    }
+
 }

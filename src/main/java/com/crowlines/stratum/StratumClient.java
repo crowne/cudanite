@@ -22,6 +22,7 @@ public class StratumClient implements Closeable {
 	private StratumServer service;
 	private String minerId;
 	private Job job;
+	private long target;
 	
 	public StratumClient(final String hostName, final int port) {
 		try {
@@ -30,6 +31,7 @@ public class StratumClient implements Closeable {
 			service = ProxyUtil.createClientProxy(this.getClass().getClassLoader(), StratumServer.class, jsonRpcClient, socket);
 			minerId = null;
 			job = null;
+			target = 0;
 		} catch (MalformedURLException e) {
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			throw new RuntimeException(e);
@@ -91,12 +93,19 @@ public class StratumClient implements Closeable {
 	    }
 	    
 	    newJob = service.getjob(this.minerId);
-	    if ( this.job == null ) {
-	        this.job = newJob;
-	    } else if ( ! this.job.jobId.equals(newJob.jobId) ) {
-            LOGGER.log(Level.INFO, "New Job detected : " + newJob.jobId );
-            this.job = newJob;
-	    }
+        if ( newJob.isValid() ) {
+    	    if ( !newJob.equals(this.job) ) {
+                LOGGER.log(Level.INFO, "New Job detected : " + newJob.jobId );
+                this.job = newJob;
+    	    }
+            
+    	    long newTarget = Long.decode("0x" + newJob.target ).longValue();
+            if (target != newTarget) {
+                target = newTarget;
+                double difficulty = (((double) 0xffffffff) / target);
+                LOGGER.log(Level.INFO, "Pool set difficulty to : " + difficulty );
+            }
+        }
 	    
 	    return job;
 	}

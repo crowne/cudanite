@@ -1,5 +1,9 @@
 package com.crowlines.stratum;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -15,6 +19,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class Job {
 
+    @JsonIgnore
+    private static final Logger LOGGER = Logger.getLogger( Job.class.getName() );
+    
     @JsonProperty("job_id")
     public String jobId;
     
@@ -37,7 +44,7 @@ public class Job {
     }
     
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         boolean result = false;
         
         if (this == obj) {
@@ -46,6 +53,36 @@ public class Job {
             Job otherJob = (Job) obj;
             String otherJobId = otherJob.jobId;
             result = jobId.equals(otherJobId);
+        }
+        
+        return result;
+    }
+    
+    @JsonIgnore
+    public boolean isValid() {
+        boolean result = true;
+        
+        if ( jobId == null ) {
+            result = false;
+            LOGGER.log(Level.WARNING, "jobId is null");
+        }
+
+        if ( target == null ) {
+            result = false;
+            LOGGER.log(Level.WARNING, "target is null");
+        }
+
+        if ( blob == null ) {
+            result = false;
+            LOGGER.log(Level.WARNING, "blob is null");
+        } else {
+            int blobLen = blob.length();
+            if (blobLen % 2 != 0 || ((blobLen / 2) < 40 && blobLen != 0) || (blobLen / 2) > 128) {
+                result = false;
+                LOGGER.log(Level.WARNING, "invalid blob length");
+            } else {
+                LOGGER.log(Level.FINE, "blob length is OK : " + blobLen);
+            }
         }
         
         return result;
