@@ -1,7 +1,7 @@
 package com.crowlines.stratum;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Job {
 
     @JsonIgnore
-    private static final Logger LOGGER = Logger.getLogger( Job.class.getName() );
+    private static final Logger LOG = LoggerFactory.getLogger(Job.class);
     
     @JsonProperty("job_id")
     public String jobId;
@@ -64,24 +64,24 @@ public class Job {
         
         if ( jobId == null ) {
             result = false;
-            LOGGER.log(Level.WARNING, "jobId is null");
+            LOG.warn("jobId is null");
         }
 
         if ( target == null ) {
             result = false;
-            LOGGER.log(Level.WARNING, "target is null");
+            LOG.warn("target is null");
         }
 
         if ( blob == null ) {
             result = false;
-            LOGGER.log(Level.WARNING, "blob is null");
+            LOG.warn("blob is null");
         } else {
             int blobLen = blob.length();
             if (blobLen % 2 != 0 || ((blobLen / 2) < 40 && blobLen != 0) || (blobLen / 2) > 128) {
                 result = false;
-                LOGGER.log(Level.WARNING, "invalid blob length");
+                LOG.warn("invalid blob length");
             } else {
-                LOGGER.log(Level.FINE, "blob length is OK : " + blobLen);
+                LOG.debug("blob length is OK : " + blobLen);
             }
         }
         

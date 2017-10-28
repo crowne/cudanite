@@ -2,12 +2,17 @@ package com.crowlines.stratum;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.crowlines.stratum.server.StratumTestFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TestJob {
+
+    
+    private static final Logger LOG = LoggerFactory.getLogger(TestJob.class);
 
     @Test
     public void testJob() throws JsonProcessingException {
@@ -16,8 +21,8 @@ public class TestJob {
         
         String json = mapper.writeValueAsString(job);
         
-        System.out.println(json);
-        
+        LOG.info(json);
+
         String pattern = "^\\{\"target\":.*,\"blob\":.*,\"job_id\":.*\\}$";
         
         Assert.assertTrue("Job does not match regexp " + pattern + " : " + json, json.matches(pattern));

@@ -6,17 +6,18 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.crowlines.stratum.server.StratumServer;
 import com.googlecode.jsonrpc4j.JsonRpcClient;
 import com.googlecode.jsonrpc4j.ProxyUtil;
 
 public class StratumClient implements Closeable {
-	
-	private static final Logger LOGGER = Logger.getLogger( StratumClient.class.getName() );
-	
+    
+    private static final Logger LOG = LoggerFactory.getLogger(StratumClient.class);
+
 	private Socket socket;
 	private JsonRpcClient jsonRpcClient;
 	private StratumServer service;
@@ -33,13 +34,13 @@ public class StratumClient implements Closeable {
 			job = null;
 			target = 0;
 		} catch (MalformedURLException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 			throw new RuntimeException(e);
 		} catch (UnknownHostException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             throw new RuntimeException(e);
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
 	}
@@ -53,7 +54,7 @@ public class StratumClient implements Closeable {
                 socket.close();
             }
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             throw e;
         }
 	}
@@ -95,7 +96,7 @@ public class StratumClient implements Closeable {
 	    newJob = service.getjob(this.minerId);
         if ( newJob.isValid() ) {
     	    if ( !newJob.equals(this.job) ) {
-                LOGGER.log(Level.INFO, "New Job detected : " + newJob.jobId );
+    	        LOG.info("New Job detected : " + newJob.jobId);
                 this.job = newJob;
     	    }
             
@@ -103,7 +104,8 @@ public class StratumClient implements Closeable {
             if (target != newTarget) {
                 target = newTarget;
                 double difficulty = (((double) 0xffffffff) / target);
-                LOGGER.log(Level.INFO, "Pool set difficulty to : " + difficulty );
+                LOG.info("Pool set difficulty to : " + difficulty);
+
             }
         }
 	    

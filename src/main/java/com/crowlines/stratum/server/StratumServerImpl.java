@@ -6,8 +6,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.crowlines.stratum.Job;
 import com.crowlines.stratum.LoginRequest;
@@ -15,7 +16,8 @@ import com.crowlines.stratum.LoginResult;
 
 public class StratumServerImpl implements StratumServer {
     
-    private static final Logger LOGGER = Logger.getLogger(StratumServerImpl.class.getName());
+    
+    private static final Logger LOG = LoggerFactory.getLogger(StratumServerImpl.class);
     private static final String PROP_KEY_IS_TEST = "isTest";
     
     private Properties props;
@@ -30,7 +32,7 @@ public class StratumServerImpl implements StratumServer {
                 this.isTest = "true".equalsIgnoreCase(props.getProperty(PROP_KEY_IS_TEST, "false"));
             }
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
         
@@ -41,7 +43,7 @@ public class StratumServerImpl implements StratumServer {
                     this.isTest = "true".equalsIgnoreCase(props.getProperty(PROP_KEY_IS_TEST, "false"));
                 }
             } catch (IOException e) {
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                LOG.error(e.getMessage(), e);
                 throw new RuntimeException(e);
             }
         }
@@ -71,7 +73,7 @@ public class StratumServerImpl implements StratumServer {
         LoginResult result = null;
         
         if ( this.isTest ) {
-            LOGGER.fine("creating Test LoginResult");
+            LOG.debug("creating Test LoginResult");
             result = StratumTestFactory.createLoginResult();
         }
         
@@ -83,7 +85,7 @@ public class StratumServerImpl implements StratumServer {
         Job job = null;
         
         if ( this.isTest ) {
-            LOGGER.fine("creating Test Job");
+            LOG.debug("creating Test Job");
             job = StratumTestFactory.createJob();
         }
         
