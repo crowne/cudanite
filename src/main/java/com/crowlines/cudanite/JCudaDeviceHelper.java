@@ -19,7 +19,7 @@ import jcuda.driver.*;
  * An example that queries and prints all attributes of all available
  * devices
  */
-public class JCudaDeviceQuery
+public class JCudaDeviceHelper
 {
 
 	static {
@@ -29,7 +29,7 @@ public class JCudaDeviceQuery
 	
 	private int deviceCountArray[] = { 0 };
 	
-	public JCudaDeviceQuery() {
+	public JCudaDeviceHelper() {
         // Obtain the number of devices
 		JCudaDriver.cuDeviceGetCount(deviceCountArray);
 	}
@@ -52,7 +52,7 @@ public class JCudaDeviceQuery
         int deviceCount = deviceCountArray[0];
         */
     	
-        JCudaDeviceQuery gpu = new JCudaDeviceQuery();
+        JCudaDeviceHelper gpu = new JCudaDeviceHelper();
         int deviceCount = gpu.getDeviceCount();
         
         System.out.println("Found " + deviceCount  + " devices");

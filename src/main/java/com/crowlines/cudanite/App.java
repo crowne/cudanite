@@ -25,7 +25,7 @@ public class App {
 
 		// create user:password
 
-		JCudaDeviceQuery info = new JCudaDeviceQuery();
+		JCudaDeviceHelper info = new JCudaDeviceHelper();
 	}
 
 	public static void main(String[] args) {

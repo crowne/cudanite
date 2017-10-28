@@ -1,15 +1,16 @@
 package com.crowlines.cudanite;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class JCudaDeviceQueryTest extends TestCase {
+public class JCudaDeviceHelperTest {
 
-	private static final String JAVA_LIBRARY_PATH = "java.library.path";
+    private static final String JAVA_LIBRARY_PATH = "java.library.path";
 
+	@Test
 	public void testMain() {
 		String javaLibPath = System.getProperty(JAVA_LIBRARY_PATH);
 		System.out.println(JAVA_LIBRARY_PATH + " = " + javaLibPath); 
-		JCudaDeviceQuery.main(null);
+		JCudaDeviceHelper.main(null);
 	}
 
 }
