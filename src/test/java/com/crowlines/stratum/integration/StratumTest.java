@@ -28,6 +28,8 @@ public class StratumTest {
     private static final Logger LOG = LoggerFactory.getLogger(StratumTest.class);
     
     private static final int PORT = 3333;
+    private static final String LOGIN = "42HQZmyzoVnHGquf5SDr3dDu4y5eMnxysZzfiFLsn5ejcAbJomZzBJsicjKmnhsu5EWdmWxNSuwj14NJMpNeYGUTP4BBCGc";
+    private static final String PASSWORD = "x";
     
     private static ServerSocket serverSocket;
     private static JsonRpcBasicServer jsonRpcServer;
@@ -60,7 +62,7 @@ public class StratumTest {
     @Before
     public void setUp() throws Exception {
         LOG.debug("setUp - Start");
-        this.client = new StratumClient(InetAddress.getLocalHost().getHostName() , PORT);
+        this.client = new StratumClient(InetAddress.getLocalHost().getHostName() , PORT, LOGIN, PASSWORD);
         LOG.debug("setUp - End");
     }
 
@@ -74,23 +76,15 @@ public class StratumTest {
     @SuppressWarnings("unused")
     @Test
     public void testLogin() throws UnknownHostException {
-        LoginResult result = client.login("T3STr7ywKXq7n1gbNQbvoadQstiQw8qM2WN4wBANaFUfNA4EQXrR4VFiVtnmJJud3TDDyRfHju9NmJzjf6NiNX4BUB7r4Dv", "x");
+        LoginResult result = client.login(LOGIN, PASSWORD);
         Assert.assertNotNull(result);
         Assert.assertEquals("login status not OK", "OK", result.status);
         Assert.assertTrue("Not logged in : " + client.getMinerId(), client.isLoggedIn() );
         LOG.info(result.toString());
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void testGetJobNoLogin() {
-        Job job = client.getJob();
-        Assert.assertNull("Shouldn't reach this point, due to no login", job);
-        Assert.fail("Don't expect to reach this point");
-    }
-
     @Test
     public void testGetJob() {
-        client.login("T3STr7ywKXq7n1gbNQbvoadQstiQw8qM2WN4wBANaFUfNA4EQXrR4VFiVtnmJJud3TDDyRfHju9NmJzjf6NiNX4BUB7r4Dv", "x");
         Job job = client.getJob();
         Assert.assertNotNull("job should not be null", job);
         LOG.info("jobId:" + job.jobId);

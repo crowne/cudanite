@@ -6,10 +6,15 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.crowlines.cudanite.CudaDevice;
+import com.crowlines.cudanite.CudaDeviceFactory;
 import com.crowlines.stratum.server.StratumServer;
 import com.googlecode.jsonrpc4j.JsonRpcClient;
 import com.googlecode.jsonrpc4j.ProxyUtil;
@@ -18,14 +23,18 @@ public class StratumClient implements Closeable {
     
     private static final Logger LOG = LoggerFactory.getLogger(StratumClient.class);
 
-	private Socket socket;
+    private Socket socket;
 	private JsonRpcClient jsonRpcClient;
 	private StratumServer service;
+	private String login;
+	private String password;
 	private String minerId;
 	private Job job;
 	private long target;
+	private CudaDeviceFactory cudaFactory;
+	private List<Miner> minerList;
 	
-	public StratumClient(final String hostName, final int port) {
+	public StratumClient(final String hostName, final int port, final String login, final String password) {
 		try {
 			socket = new Socket(InetAddress.getByName(hostName), port, null, 0);
 			jsonRpcClient = new JsonRpcClient();
@@ -33,6 +42,22 @@ public class StratumClient implements Closeable {
 			minerId = null;
 			job = null;
 			target = 0;
+			cudaFactory = new CudaDeviceFactory();
+            this.login = login;
+            this.password = password;
+            this.login();
+			
+			int deviceCount = cudaFactory.getDeviceCount();
+			minerList = new ArrayList<Miner>(deviceCount);
+			
+			for (int i = 0; i < deviceCount; i++) {
+                CudaDevice device = cudaFactory.getDevice(i);
+                device = cudaFactory.getDevice(i);
+                Miner miner = new Miner(this, device);
+                minerList.add(miner);
+                LOG.info("Added miner #" + i);
+            }
+			
 		} catch (MalformedURLException e) {
 			LOG.error(e.getMessage(), e);
 			throw new RuntimeException(e);
@@ -48,7 +73,11 @@ public class StratumClient implements Closeable {
     @Override
     public void close() throws IOException {
         try {
-            job = null;	    
+            for (Iterator<Miner> iterator = minerList.iterator(); iterator.hasNext();) {
+                Miner miner = (Miner) iterator.next();
+                miner.shutdown();
+            }
+            job = null;
             minerId = null;
             if ( socket != null ) {
                 socket.close();
@@ -59,10 +88,10 @@ public class StratumClient implements Closeable {
         }
 	}
 	
-	public LoginResult login(final String login, final String pass) {
+    public LoginResult login() {
         LoginRequest arguments = new LoginRequest();
-        arguments.login = login;
-        arguments.pass = pass;
+        arguments.login = this.login;
+        arguments.pass = this.password;
         arguments.agent = "cudanite/1.0";
         
         LoginResult result = service.login(arguments);
@@ -72,6 +101,13 @@ public class StratumClient implements Closeable {
         }
         
         return result;
+    }
+	
+    public LoginResult login(final String login, final String password) {
+        this.login = login;
+        this.password = password;
+        
+        return this.login();
 	}
 	
 	public boolean isLoggedIn() {
