@@ -1,8 +1,13 @@
 package com.crowlines.stratum;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.crowlines.cudanite.CudaDevice;
 
 public class Miner implements Runnable {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(Miner.class);
 
     private boolean isActive;
     private Thread minerThread;
@@ -43,14 +48,20 @@ public class Miner implements Runnable {
     
     @Override
     public void run() {
+        int loopCount = 0;
         while ( isActive ) {
-            job = stratumClient.getJob();
+            synchronized (stratumClient) {
+                job = stratumClient.getJob();
+            }
+            loopCount++;
         }
-
+        LOG.info("loopCount = " + loopCount);
     }
     
     public void shutdown() {
-        isActive = false;
+        synchronized (stratumClient) {
+            isActive = false;
+        }
     }
 
 }

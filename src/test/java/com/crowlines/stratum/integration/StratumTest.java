@@ -68,6 +68,9 @@ public class StratumTest {
 
     @After
     public void tearDown() throws Exception {
+        
+//        Thread.sleep(500);
+        
         if ( this.client != null) {
             this.client.close();
         }

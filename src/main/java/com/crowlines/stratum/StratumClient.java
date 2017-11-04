@@ -79,8 +79,10 @@ public class StratumClient implements Closeable {
             }
             job = null;
             minerId = null;
-            if ( socket != null ) {
-                socket.close();
+            synchronized (service) {
+                if ( socket != null ) {
+                    socket.close();
+                }
             }
         } catch (IOException e) {
             LOG.error(e.getMessage(), e);
@@ -94,10 +96,14 @@ public class StratumClient implements Closeable {
         arguments.pass = this.password;
         arguments.agent = "cudanite/1.0";
         
-        LoginResult result = service.login(arguments);
-        if ( result != null && "OK".equals(result.status) ) {
-            this.minerId = result.id;
-            this.job = result.job;
+        LoginResult result = null;
+        synchronized (service) {
+            result = service.login(arguments);
+            if ( result != null && "OK".equals(result.status) ) {
+                this.minerId = result.id;
+                this.job = result.job;
+                LOG.info("First Job received : {}", this.job.jobId);
+            }            
         }
         
         return result;
@@ -129,21 +135,22 @@ public class StratumClient implements Closeable {
 	        throw new IllegalStateException("Not logged in");
 	    }
 	    
-	    newJob = service.getjob(this.minerId);
-        if ( newJob.isValid() ) {
-    	    if ( !newJob.equals(this.job) ) {
-    	        LOG.info("New Job detected : " + newJob.jobId);
-                this.job = newJob;
-    	    }
-            
-    	    long newTarget = Long.decode("0x" + newJob.target ).longValue();
-            if (target != newTarget) {
-                target = newTarget;
-                double difficulty = (((double) 0xffffffff) / target);
-                LOG.info("Pool set difficulty to : " + difficulty);
-
+	    synchronized (service) {
+    	    newJob = service.getjob(this.minerId);
+            if ( newJob.isValid() ) {
+        	    if ( !newJob.equals(this.job) ) {
+        	        LOG.info("New Job detected : " + newJob.jobId);
+                    this.job = newJob;
+        	    }
+                
+        	    long newTarget = Long.decode("0x" + newJob.target ).longValue();
+                if (target != newTarget) {
+                    target = newTarget;
+                    double difficulty = (((double) 0xffffffff) / target);
+                    LOG.info("Pool set difficulty to : {}",  difficulty);
+                }
             }
-        }
+	    }
 	    
 	    return job;
 	}
